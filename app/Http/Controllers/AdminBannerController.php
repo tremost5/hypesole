@@ -1,0 +1,9 @@
+<?php
+namespace App\Http\Controllers;
+use App\Models\Banner;use Illuminate\Http\Request;use Illuminate\Http\RedirectResponse;use Illuminate\Support\Facades\Storage;use Illuminate\View\View;
+class AdminBannerController extends Controller {
+ public function index(): View{return view('admin.banners.index',['banners'=>Banner::orderBy('sort_order')->latest()->get()]);}
+ public function store(Request $r): RedirectResponse {$d=$r->validate(['title'=>'required|string|max:160','subtitle'=>'nullable|string|max:255','image'=>'required|image|mimes:jpg,jpeg,png,webp|max:5120','button_text'=>'nullable|string|max:60','button_url'=>'nullable|string|max:500','sort_order'=>'nullable|integer|min:0','starts_at'=>'nullable|date','ends_at'=>'nullable|date|after_or_equal:starts_at']);$d['image_path']=$r->file('image')->store('banners','public');unset($d['image']);$d['is_active']=$r->boolean('is_active');Banner::create($d);return back()->with('success','Banner berhasil ditambahkan.');}
+ public function update(Request $r,Banner $banner): RedirectResponse {$d=$r->validate(['title'=>'required|string|max:160','subtitle'=>'nullable|string|max:255','image'=>'nullable|image|mimes:jpg,jpeg,png,webp|max:5120','button_text'=>'nullable|string|max:60','button_url'=>'nullable|string|max:500','sort_order'=>'nullable|integer|min:0','starts_at'=>'nullable|date','ends_at'=>'nullable|date|after_or_equal:starts_at']);if($r->hasFile('image')){Storage::disk('public')->delete($banner->image_path);$d['image_path']=$r->file('image')->store('banners','public');}unset($d['image']);$d['is_active']=$r->boolean('is_active');$banner->update($d);return back()->with('success','Banner diperbarui.');}
+ public function destroy(Banner $banner): RedirectResponse {Storage::disk('public')->delete($banner->image_path);$banner->delete();return back()->with('success','Banner dihapus.');}
+}

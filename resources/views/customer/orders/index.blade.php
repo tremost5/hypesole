@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Order Shoe Care | HYPESOLE</title>@vite(['resources/css/app.css','resources/js/app.js'])</head>
+<body class="min-h-screen bg-slate-100 text-slate-900">
+<header class="bg-slate-950 px-4 py-4 text-white"><div class="mx-auto flex max-w-5xl items-center justify-between"><a href="{{ route('customer.dashboard') }}" class="font-black tracking-wide">HYPESOLE</a><a href="{{ route('customer.booking.create') }}" class="mr-2 inline-flex min-h-10 items-center rounded-xl bg-teal-600 px-4 text-sm font-black text-white">BOOKING BARU</a><a href="{{ route('customer.dashboard') }}" style="background:#fff;color:#0f172a" class="inline-flex min-h-10 items-center rounded-xl px-4 text-sm font-black">AKUN SAYA</a></div></header>
+<main class="mx-auto max-w-5xl px-4 py-8"><p class="text-xs font-black tracking-widest text-cyan-800">RIWAYAT PERAWATAN</p><h1 class="mt-1 text-3xl font-black">Order Shoe Care Saya</h1><p class="mt-2 text-sm text-slate-500">Pantau progres setiap pasang sepatu dalam satu nomor order.</p>
+<div class="mt-6 space-y-4">
+@forelse($orders as $order)
+<a href="{{ route('customer.orders.show',$order) }}" class="block rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-400">
+<div class="flex flex-wrap items-start justify-between gap-3"><div><p class="text-xs font-black text-cyan-800">{{ $order->order_number }}</p><h2 class="mt-1 text-lg font-black">{{ $order->customer_name }}</h2><p class="text-sm text-slate-500">{{ $order->items->count() }} pasang sepatu · {{ $order->received_at?->format('d/m/Y H:i') }}</p></div><span class="rounded-full bg-slate-950 px-3 py-2 text-xs font-black text-white">{{ $order->status_label }}</span></div>
+<div class="mt-4 grid gap-2 sm:grid-cols-2">@foreach($order->items as $item)<div class="rounded-xl bg-slate-50 p-3"><p class="text-sm font-black">{{ $item->shoe_brand }} {{ $item->shoe_model }}</p><p class="mt-1 text-xs text-slate-500">{{ $item->service_name }}</p><p class="mt-2 text-xs font-bold text-cyan-800">{{ $item->status_label }}</p></div>@endforeach</div>
+<div class="mt-4 text-sm font-black text-cyan-800">LIHAT DETAIL & PROGRES →</div>
+</a>
+@empty<div class="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center"><p class="font-black">Belum ada order yang terhubung ke akun ini.</p><p class="mt-2 text-sm text-slate-500">Order dari toko akan muncul setelah nomor WhatsApp cocok dengan akun terverifikasi.</p><a href="{{ route('home') }}" style="background:#0f172a;color:#fff" class="mt-5 inline-flex min-h-11 items-center rounded-xl px-5 font-black">LIHAT SNEAKER STORE</a></div>@endforelse
+</div><div class="mt-5">{{ $orders->links() }}</div></main></body></html>
