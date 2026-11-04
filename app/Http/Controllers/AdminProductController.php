@@ -35,7 +35,14 @@ class AdminProductController extends Controller
     {
         $data = $this->validated($request);
         $data['slug'] = $this->uniqueSlug($data['name']);
-        $data['image_path'] = $request->file('image')?->store('products', 'public');
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            if (! $imagePath) {
+                return back()->withErrors(['image' => 'Gambar gagal disimpan. Periksa folder penyimpanan publik di hosting.'])->withInput();
+            }
+        }
+        $data['image_path'] = $imagePath;
         unset($data['image']);
 
         DB::transaction(function () use ($data, $request) {
@@ -61,15 +68,22 @@ class AdminProductController extends Controller
         $data = $this->validated($request, $product);
         $data['slug'] = $this->uniqueSlug($data['name'], $product->id);
 
+        $oldImagePath = $product->image_path;
+        $newImagePath = null;
         if ($request->hasFile('image')) {
-            if ($product->image_path) {
-                Storage::disk('public')->delete($product->image_path);
+            $newImagePath = $request->file('image')->store('products', 'public');
+            if (! $newImagePath) {
+                return back()->withErrors(['image' => 'Gambar gagal disimpan. Periksa folder penyimpanan publik di hosting.'])->withInput();
             }
-            $data['image_path'] = $request->file('image')->store('products', 'public');
+            $data['image_path'] = $newImagePath;
         }
         unset($data['image'], $data['stock']);
 
         $product->update($data);
+
+        if ($newImagePath && $oldImagePath && $oldImagePath !== $newImagePath) {
+            Storage::disk('public')->delete($oldImagePath);
+        }
 
         return back()->with('success', 'Data produk berhasil diperbarui. Perubahan stok dilakukan melalui menu stok.');
     }

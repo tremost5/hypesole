@@ -68,7 +68,18 @@
                         <input type="number" name="cost_price" value="{{ $product->cost_price }}" min="0" step="1000" class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
                         <textarea name="condition_note" rows="2" placeholder="Kondisi" class="rounded-lg border border-slate-300 px-3 py-2 text-sm sm:col-span-2">{{ $product->condition_note }}</textarea>
                         <textarea name="description" rows="2" placeholder="Deskripsi" class="rounded-lg border border-slate-300 px-3 py-2 text-sm sm:col-span-2">{{ $product->description }}</textarea>
-                        <input type="file" name="image" accept="image/jpeg,image/png,image/webp" class="text-xs">
+                        <div class="sm:col-span-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                            @if($product->image_path)
+                                <div class="mb-2 flex items-center gap-3">
+                                    <img src="{{ asset('storage/'.$product->image_path) }}" alt="Foto {{ $product->name }} saat ini" class="h-16 w-16 rounded-lg border border-slate-200 bg-white object-contain">
+                                    <span class="text-xs text-slate-600">Foto saat ini. Pilih file baru untuk menggantinya; kosongkan jika tidak ingin mengubah foto.</span>
+                                </div>
+                            @else
+                                <p class="mb-2 text-xs text-slate-500">Belum ada foto produk.</p>
+                            @endif
+                            <input type="file" name="image" accept="image/jpeg,image/png,image/webp" class="block w-full text-xs">
+                            <p class="mt-1 text-[11px] text-slate-500">Format JPG, PNG, atau WebP. Maksimal 3 MB.</p>
+                        </div>
                         <select name="is_active" class="rounded-lg border border-slate-300 px-3 py-2 text-sm"><option value="1" @selected($product->is_active)>Aktif</option><option value="0" @selected(!$product->is_active)>Nonaktif</option></select>
                         <button class="rounded-lg bg-slate-950 px-3 py-2 text-sm font-bold text-white sm:col-span-2">Simpan perubahan</button>
                     </form>

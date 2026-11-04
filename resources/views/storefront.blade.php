@@ -58,7 +58,7 @@
 
 <main>
 @if(($banners ?? collect())->isNotEmpty())
-<section class="section-wrap py-5"><div class="grid gap-4 md:grid-cols-2">@foreach($banners as $banner)<article class="relative overflow-hidden rounded-3xl bg-slate-900 text-white shadow-xl"><img src="{{ asset('storage/'.$banner->image_path) }}" alt="{{ $banner->title }}" class="absolute inset-0 h-full w-full object-cover opacity-55"><div class="relative z-10 min-h-48 p-7 flex flex-col justify-end"><p class="text-2xl font-black">{{ $banner->title }}</p>@if($banner->subtitle)<p class="mt-2 text-sm text-white/90">{{ $banner->subtitle }}</p>@endif @if($banner->button_text && $banner->button_url)<a href="{{ $banner->button_url }}" class="action action-primary mt-4 w-fit">{{ $banner->button_text }}</a>@endif</div></article>@endforeach</div></section>
+<section class="section-wrap py-5"><div class="grid gap-4 md:grid-cols-2">@foreach($banners as $banner)<article class="overflow-hidden rounded-3xl bg-transparent"><img src="{{ asset('storage/'.$banner->image_path) }}" alt="{{ $banner->title }}" loading="lazy" class="mx-auto max-h-72 w-full object-contain"><div class="px-2 pb-3 pt-2 text-slate-900"><p class="text-xl font-black">{{ $banner->title }}</p>@if($banner->subtitle)<p class="mt-1 text-sm text-slate-600">{{ $banner->subtitle }}</p>@endif @if($banner->button_text && $banner->button_url)<a href="{{ $banner->button_url }}" class="action action-primary mt-3 w-fit">{{ $banner->button_text }}</a>@endif</div></article>@endforeach</div></section>
 @endif
 <section class="hero-bg relative overflow-hidden text-white">
  <div class="section-wrap grid min-h-[560px] items-center gap-10 py-14 md:grid-cols-[1.02fr_.98fr] md:py-20">
@@ -184,6 +184,8 @@
 <div id="pwa-install-banner" class="fixed inset-x-3 bottom-3 z-50 mx-auto hidden max-w-md rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
  <div class="flex items-center gap-3"><img src="{{ asset('icons/icon-192.png') }}" alt="" class="h-12 w-12 rounded-xl"><div class="min-w-0 flex-1"><p class="font-black text-slate-900">Pasang HYPESOLE</p><p class="text-xs text-slate-500">Akses cepat dari layar utama, tanpa APK.</p></div><button id="pwa-install-close" type="button" aria-label="Tutup" class="rounded-lg px-3 py-2 text-slate-500">✕</button></div>
  <button id="pwa-install-button" type="button" class="mt-3 min-h-11 w-full rounded-xl bg-[#0b1d40] px-4 font-black text-white">TAMBAHKAN KE LAYAR UTAMA</button>
+ <p id="pwa-install-help" class="mt-2 hidden text-xs leading-5 text-slate-600">Jika jendela pemasangan tidak muncul: di Chrome Android buka menu ⋮ lalu pilih <strong>Install app</strong> atau <strong>Tambahkan ke layar utama</strong>. Di Chrome desktop, gunakan ikon Install di bilah alamat atau menu browser.</p>
+ <div id="pwa-ios-instructions" class="mt-2 hidden rounded-xl bg-slate-50 p-3 text-xs leading-5 text-slate-600">Di Safari iPhone/iPad, tekan tombol <strong>Bagikan</strong>, lalu pilih <strong>Tambahkan ke Layar Utama</strong>.</div>
 </div>
 </body>
 </html>

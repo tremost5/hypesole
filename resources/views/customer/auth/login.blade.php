@@ -54,7 +54,12 @@
                 Dengan masuk, kamu menyetujui penggunaan nomor WhatsApp untuk verifikasi akun dan informasi layanan HYPESOLE.
             </p>
         </section>
-        <p class="mt-6 text-center text-xs text-slate-400">Premium sneaker experience, accessible for everyone.</p>
+        <div class="mt-6 flex flex-col items-center gap-3 text-center">
+            <a href="{{ route('home') }}" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-cyan-200">
+                <span aria-hidden="true">←</span> Kembali ke HYPESOLE
+            </a>
+            <p class="text-xs text-slate-400">Premium sneaker experience, accessible for everyone.</p>
+        </div>
     </main>
 </body>
 </html>

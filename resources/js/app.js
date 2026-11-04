@@ -27,11 +27,27 @@ function hideInstallBanner() {
     installBanner?.classList.add('hidden');
 }
 
+const installHelp = document.getElementById('pwa-install-help');
+
 if (installBanner && !isStandalone && !sessionStorage.getItem('hypesole-install-dismissed') && isIos) {
     installTitle.textContent = 'Tambahkan HYPESOLE ke Home Screen';
     installDescription.textContent = 'Pasang aplikasi langsung dari Safari, tanpa APK.';
     installButton.textContent = 'CARA PASANG DI IPHONE';
     installBanner.classList.remove('hidden');
+}
+
+// Browser tidak selalu mengirim beforeinstallprompt. Tampilkan petunjuk manual
+// agar pengguna tetap tahu cara memasang PWA dari menu browser.
+if (installBanner && !isStandalone && !isIos && !sessionStorage.getItem('hypesole-install-dismissed')) {
+    window.setTimeout(() => {
+        if (sessionStorage.getItem('hypesole-install-dismissed')) return;
+        if (!deferredInstallPrompt && installBanner.classList.contains('hidden')) {
+            installTitle.textContent = 'Pasang HYPESOLE';
+            installDescription.textContent = 'Tambahkan HYPESOLE ke layar utama atau desktop.';
+            installButton.textContent = 'LIHAT CARA INSTALL';
+            installBanner.classList.remove('hidden');
+        }
+    }, 3500);
 }
 
 window.addEventListener('beforeinstallprompt', (event) => {
@@ -50,7 +66,10 @@ installButton?.addEventListener('click', async () => {
         iosInstructions?.classList.toggle('hidden');
         return;
     }
-    if (!deferredInstallPrompt) return;
+    if (!deferredInstallPrompt) {
+        installHelp?.classList.toggle('hidden');
+        return;
+    }
     await deferredInstallPrompt.prompt();
     const choice = await deferredInstallPrompt.userChoice;
     deferredInstallPrompt = null;
