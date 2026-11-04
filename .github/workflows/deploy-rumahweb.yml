@@ -64,7 +64,6 @@ jobs:
             **/node_modules/**
             **/tests/**
             **/storage/**
-            **/bootstrap/cache/**
             **/database/*.sqlite
             **/database/*.db
             **/public/hot
