@@ -5,6 +5,12 @@
 
     RewriteEngine On
 
+    # Route PWA assets through Laravel when the hosting ACL denies static files.
+    RewriteRule ^manifest\.webmanifest$ index.php [L]
+    RewriteRule ^service-worker\.js$ index.php [L]
+    RewriteRule ^offline\.html$ index.php [L]
+    RewriteRule ^icons/(icon-192\.png|icon-512\.png|icon-512-maskable\.png)$ index.php [L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  @php($pwaBasePath = rtrim(request()->getBaseUrl(), '/'))
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#07152f">
@@ -9,8 +10,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="HYPESOLE">
-    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
-    <link rel="apple-touch-icon" href="{{ asset('icons/icon-192.png') }}">
+    <link rel="manifest" href="{{ $pwaBasePath !== '' ? $pwaBasePath.'/manifest.webmanifest' : asset('manifest.webmanifest') }}">
+    <link rel="apple-touch-icon" href="{{ $pwaBasePath !== '' ? $pwaBasePath.'/icons/icon-192.png' : asset('icons/icon-192.png') }}">
     <title>HYPESOLE — Premium Sneaker Care & Store</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -20,6 +21,7 @@
       .hero-bg:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.17;background-image:linear-gradient(rgba(255,255,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.14) 1px,transparent 1px);background-size:54px 54px;mask-image:linear-gradient(90deg,black,transparent)}
       .glass{background:linear-gradient(135deg,rgba(255,255,255,.17),rgba(255,255,255,.055));backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.2);box-shadow:0 24px 80px rgba(0,0,0,.22)}
       .section-wrap{width:min(1220px,calc(100% - 36px));margin-inline:auto}
+      .pwa-install-banner{bottom:max(12px,env(safe-area-inset-bottom))}
       .action{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 22px;border-radius:15px;font-weight:850;font-size:13px;letter-spacing:.035em;transition:transform .22s,box-shadow .22s,background .22s}
       .action:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #70a7ff;outline-offset:3px}
       .action-primary{background:linear-gradient(110deg,#dceaff 0%,#fff 48%,#a9caff 100%);color:#071a3b;box-shadow:0 10px 30px rgba(76,142,255,.2)}.action-primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(76,142,255,.32)}
@@ -181,10 +183,10 @@
 <footer class="bg-[#101820] py-9 text-white">
  <div class="section-wrap flex flex-col justify-between gap-5 sm:flex-row sm:items-center"><div><strong class="text-lg font-black tracking-widest">HYPESOLE</strong><p class="mt-1 text-sm text-slate-400">Premium Sneaker Care & Store</p></div><div class="text-sm text-slate-400 sm:text-right"><p>© {{ date('Y') }} HYPESOLE. All rights reserved.</p><p class="mt-1">Kharisnet : <a class="font-bold text-[#b8d3ff]" href="https://malang-web.site" target="_blank" rel="noopener">malang-web.site</a></p></div></div>
 </footer>
-<div id="pwa-install-banner" class="fixed inset-x-3 bottom-3 z-50 mx-auto hidden max-w-md rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
- <div class="flex items-center gap-3"><img src="{{ asset('icons/icon-192.png') }}" alt="" class="h-12 w-12 rounded-xl"><div class="min-w-0 flex-1"><p class="font-black text-slate-900">Pasang HYPESOLE</p><p class="text-xs text-slate-500">Akses cepat dari layar utama, tanpa APK.</p></div><button id="pwa-install-close" type="button" aria-label="Tutup" class="rounded-lg px-3 py-2 text-slate-500">✕</button></div>
- <button id="pwa-install-button" type="button" class="mt-3 min-h-11 w-full rounded-xl bg-[#0b1d40] px-4 font-black text-white">TAMBAHKAN KE LAYAR UTAMA</button>
- <p id="pwa-install-help" class="mt-2 hidden text-xs leading-5 text-slate-600">Jika jendela pemasangan tidak muncul: di Chrome Android buka menu ⋮ lalu pilih <strong>Install app</strong> atau <strong>Tambahkan ke layar utama</strong>. Di Chrome desktop, gunakan ikon Install di bilah alamat atau menu browser.</p>
+<div id="pwa-install-banner" role="region" aria-label="Install HYPESOLE" aria-live="polite" class="pwa-install-banner fixed inset-x-3 z-50 mx-auto hidden max-w-md rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
+ <div class="flex items-center gap-3"><img src="{{ $pwaBasePath !== '' ? $pwaBasePath.'/icons/icon-192.png' : asset('icons/icon-192.png') }}" alt="" width="48" height="48" class="h-12 w-12 rounded-xl"><div class="min-w-0 flex-1"><p id="pwa-install-title" class="font-black text-slate-900">Pasang HYPESOLE</p><p id="pwa-install-description" class="text-xs text-slate-500">Akses cepat dari layar utama atau desktop.</p></div><button id="pwa-install-close" type="button" aria-label="Tutup ajakan instalasi" class="rounded-lg px-3 py-2 text-slate-500">✕</button></div>
+ <button id="pwa-install-button" type="button" class="mt-3 min-h-11 w-full rounded-xl bg-[#0b1d40] px-4 font-black text-white">INSTALL HYPESOLE</button>
+ <p id="pwa-install-help" class="mt-2 hidden text-xs leading-5 text-slate-600"></p>
  <div id="pwa-ios-instructions" class="mt-2 hidden rounded-xl bg-slate-50 p-3 text-xs leading-5 text-slate-600">Di Safari iPhone/iPad, tekan tombol <strong>Bagikan</strong>, lalu pilih <strong>Tambahkan ke Layar Utama</strong>.</div>
 </div>
 </body>

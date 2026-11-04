@@ -26,6 +26,50 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
+| Public PWA files
+|--------------------------------------------------------------------------
+|
+| Some RumahWeb public directories deny direct access to uploaded static
+| files. The matching .htaccess rewrites only these URLs to Laravel so they
+| remain public while preserving their correct MIME types and worker scope.
+*/
+Route::get('/manifest.webmanifest', function () {
+    return response()->file(public_path('manifest.webmanifest'), [
+        'Content-Type' => 'application/manifest+json; charset=utf-8',
+        'Cache-Control' => 'no-cache, must-revalidate',
+    ]);
+})->name('pwa.manifest');
+
+Route::get('/service-worker.js', function (\Illuminate\Http\Request $request) {
+    $appPath = parse_url((string) config('app.url'), PHP_URL_PATH);
+    $basePath = is_string($appPath) && $appPath !== '' ? $appPath : $request->getBaseUrl();
+    $scope = '/'.trim((string) $basePath, '/').'/';
+
+    return response()->file(public_path('service-worker.js'), [
+        'Content-Type' => 'application/javascript; charset=utf-8',
+        'Cache-Control' => 'no-cache, must-revalidate',
+        'Service-Worker-Allowed' => $scope,
+    ]);
+})->name('pwa.service-worker');
+
+Route::get('/offline.html', function () {
+    return response()->file(public_path('offline.html'), [
+        'Content-Type' => 'text/html; charset=utf-8',
+        'Cache-Control' => 'no-cache, must-revalidate',
+    ]);
+})->name('pwa.offline');
+
+Route::get('/icons/{icon}', function (string $icon) {
+    abort_unless(in_array($icon, ['icon-192.png', 'icon-512.png', 'icon-512-maskable.png'], true), 404);
+
+    return response()->file(public_path('icons/'.$icon), [
+        'Content-Type' => 'image/png',
+        'Cache-Control' => 'public, max-age=86400',
+    ]);
+})->where('icon', 'icon-(192|512|512-maskable)\.png')->name('pwa.icon');
+
+/*
+|--------------------------------------------------------------------------
 | PUBLIC SNEAKER STORE
 |--------------------------------------------------------------------------
 */

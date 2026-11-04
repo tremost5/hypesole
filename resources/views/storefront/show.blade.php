@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    @php($pwaBasePath = rtrim(request()->getBaseUrl(), '/'))
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#07152f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="HYPESOLE">
-    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
-    <link rel="apple-touch-icon" href="{{ asset('icons/icon-192.png') }}">
+    <link rel="manifest" href="{{ $pwaBasePath !== '' ? $pwaBasePath.'/manifest.webmanifest' : asset('manifest.webmanifest') }}">
+    <link rel="apple-touch-icon" href="{{ $pwaBasePath !== '' ? $pwaBasePath.'/icons/icon-192.png' : asset('icons/icon-192.png') }}">
     <title>{{ $product->name }} | HYPESOLE</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
